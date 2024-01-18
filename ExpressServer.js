@@ -1,23 +1,27 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
+const cors = require('cors');
 
 const app = express();
-const port = 3000;
+app.use(cors());
+const port = 5000;
 
-const uri = "mongodb://localhost:27017";
+const uri = "mongodb://127.0.0.1:27017";
 const client = new MongoClient(uri);
 
-app.get('/students/:rollNumber', async (req, res) => {
+app.get('/students/:rollNum', async (req, res) => {
   try {
     await client.connect();
-    const db = client.db('yourDatabaseName');
-    const collection = db.collection('students');
+    const db = client.db('studentDetails');
+    const collection = db.collection('details');
 
-    const rollNumber = req.params.rollNumber;
-    const student = await collection.findOne({ rollNumber: rollNumber });
-
+    const rollNum = parseInt(req.params.rollNum);
+    
+    const student = await collection.findOne({ rollNumber: rollNum });
+    console.log(student)
     if (student) {
-      res.json({ name: student.fistName+student.lastName });
+      let fname = student.firstName+" "+student.lastName;
+      res.json({ name:  fname});
     } else {
       res.status(404).json({ message: 'Student not found' });
     }
