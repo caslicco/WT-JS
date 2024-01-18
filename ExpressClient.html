@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Roll Number</title>
+</head>
+<body>
+  <input type="text" id="myTextField">
+  <button onclick="myFunction()">Submit</button>
+  <p id="details'"></p>
+
+  <script>
+    function myFunction() {
+      const textFieldValue = document.getElementById("myTextField").value;
+
+const rollNumber = parseInt(textFieldValue);
+
+fetch(`http://localhost:3000/students/${rollNumber}`)
+  .then(response => response.json())
+  .then(data => {
+    if (data.name) {
+      console.log(`Student name: ${data.name}`);
+    } else {
+      console.log(data.message);
+    }
+  })
+  .catch(error => console.error(error));
+  document.getElementById("details").innerHTML= `Student name: ${data.name}`;
+    }
+  </script>
+</body>
+</html>
